@@ -1,0 +1,1 @@
+This Java application allows users to copy and paste Bible verses with a specific format fit for JBCH Wednesday sermons.
