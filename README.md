@@ -4,9 +4,12 @@ This Java application allows users to copy and paste Bible verses with a specifi
 This application copies bible verses in English (New King James Version) and Korean (개역한글) to aid translators/interpretors who is translating the recorded version of the sermon to accurately convey the verses recited by the pastor.
 
 The format is: (depending on whether the pastor speaks of the location of the verse before reciting or after)
+
 (BookName Ch#:Vs#-Vs#) Verse Content
 (책이름 장#:절#-절#) 구절
+
 Or
+
 Verse Content (BookName Ch#:Vs#-Vs#)
 구절 (책이름 장#:절#-절#)
 
