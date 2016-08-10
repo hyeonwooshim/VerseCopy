@@ -6,6 +6,8 @@ Please take note that there are special cases in which the content of one langua
 Ex> Ephesians 3:19 -- The mention of the dimensions of grace are mentioned in different verse numbers for Korean and English.
 In these cases you must manually copy down the verses and edit them.
 
+**NOTE: when pasting in the READ format of a verse or verses, make sure to use the "Merge Formatting" (the middle option)!**
+
 @Recited or Read
 Recited: verse was recited from memory.
 
@@ -28,7 +30,7 @@ Ex> Job
 
 Korean input should EXACTLY MATCH the shortened names in the list below.
 
-Here is a list of shortest possible inputs for English:
+Here is a list of (intuitive) shortest possible inputs for English:
 (창) Genesis = G
 (출) Exodus = Ex
 (레) Leviticus = L
