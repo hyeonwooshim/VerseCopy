@@ -101,17 +101,19 @@ public class VerseCopier extends Application {
         copyButton.setDefaultButton(true);
         copyButton.setOnAction(event -> {
 				if (getRecitedOrRead()) {
-				
 					clipper.setClipboardContents(formatter.getVerses(getBook(),
 						getChapterNumber(), getBeginningVerseNumber(),
 						getEndingVerseNumber(), getBeforeOrAfter()));
 
 					status.setText("COPIED");
 					rb1.requestFocus();
+					
 				} else {
-					clipper.setClipboardContents(formatter.getNumberedVerses(getBook(),
-						getChapterNumber(), getBeginningVerseNumber(),
-						getEndingVerseNumber()));
+					clipper.setClipboardHtmlContents(
+						formatter.getHtmlNumberedVerses(getBook(),
+							getChapterNumber(), getBeginningVerseNumber(),
+							getEndingVerseNumber())
+					);
 
 					status.setText("COPIED");
 					rb3.requestFocus();

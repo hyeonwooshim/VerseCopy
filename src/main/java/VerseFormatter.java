@@ -62,44 +62,58 @@ public class VerseFormatter {
     }
 	
 	/** Methods for getting numbered lines (made for Microsoft Word) **/
-	public String getNumberedEngLines(int bookNum, int chap,
+	public String getHtmlNumberedEngLines(int bookNum, int chap,
         int verse1, int verse2) {
         String engStr = "";
         for (int i = verse1 - 1; i < verse2; i++) {
-            engStr += bible.getEngLineAt(bookNum, chap - 1, i) + " ";
+            engStr += (i + 1) + ". "
+				+ bible.getEngLineAt(bookNum, chap - 1, i) + "<br><br>";
         }
-        return engStr.substring(0, engStr.length() - 1);
+        return engStr;
     }
 
-    public String getNumberedKorLines(int bookNum, int chap,
+    public String getHtmlNumberedKorLines(int bookNum, int chap,
         int verse1, int verse2) {
         String korStr = "";
         for (int i = verse1 - 1; i < verse2; i++) {
-            korStr += bible.getKorLineAt(bookNum, chap - 1, i) + " ";
+            korStr += (i + 1)
+				+ ". " + bible.getKorLineAt(bookNum, chap - 1, i) + "<br><br>";
         }
-        return korStr.substring(0, korStr.length() - 1);
+        return korStr;
     }
 
-    public String getNumberedVerses(String book, int chap, int verse1, int verse2) {
+	/**
+	 *
+	 * @return HTML formatted 2-column table of the Korean verses in first
+	 * 			column and the English verses in the second column.
+	 */
+    public String getHtmlNumberedVerses(String book, int chap, int verse1, int verse2) {
         int bookNum = bible.findBook(book);
         String korBookName = bible.LIST_KOR[bookNum];
         String engBookName = bible.LIST_ENG[bookNum];
 		String str = "";
 		
-        String korLines = getKorLines(bookNum, chap, verse1, verse2);
-        String engLines = getEngLines(bookNum, chap, verse1, verse2);
-
-
-        if (verse1 == verse2) {
-            str += "\"" + korBookName + " " + chap + ":" + verse1 + "\"";
-            str += "\t\"" + engBookName + " " + chap + ":" + verse1 + "\"\n";
+        String korLines = getHtmlNumberedKorLines(bookNum, chap, verse1, verse2);
+        String engLines = getHtmlNumberedEngLines(bookNum, chap, verse1, verse2);
+		
+		if (verse1 == verse2) {
+            str += "<pre><b>\"" + korBookName + " " + chap + ":" + verse1 + "\"";
+            str += "&#9;\"" + engBookName + " " + chap + ":" + verse1 + "\"</b></pre><br>";
         } else {
-            str += "\"" + korBookName + " " + chap + ":" + verse1 + "-" + verse2 + "\"";
-            str += "\t\"" + engBookName + " " + chap + ":" + verse1 + "-" + verse2 + "\"\n";
+            str += "<pre><b>\"" + korBookName + " " + chap + ":" + verse1 + "-" + verse2 + "\"";
+            str += "&#9;\"" + engBookName + " " + chap + ":" + verse1 + "-" + verse2 + "\"</b></pre>";
         }
 		
-		
-		
+		str += "<table style=\"border:1px solid black; border-collapse:collapse;\">";
+		str += "<tr>";
+		str += "<td style=\"vertical-align:top; border:1px solid black;\">";
+		str += korLines;
+		str += "</td>";
+		str += "<td style=\"vertical-align:top; border:1px solid black;\">";
+		str += engLines;
+		str += "</td>";
+		str += "</tr>";
+		str += "</table>";
 		
         return str;
     }
