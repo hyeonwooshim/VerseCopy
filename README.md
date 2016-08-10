@@ -1,4 +1,4 @@
-ver 1.1
+ver 1.1 (added read-verse copy feature)
 
 Author: Eric (Hyeon Woo) Shim
 
