@@ -6,7 +6,7 @@ Please take note that there are special cases in which the content of one langua
 Ex> Ephesians 3:19 -- The mention of the dimensions of grace are mentioned in different verse numbers for Korean and English.
 In these cases you must manually copy down the verses and edit them.
 
-**NOTE: when pasting in the READ format of a verse or verses, make sure to use the "Merge Formatting" (the middle option)!**
+**NOTE: when pasting in the READ format of a verse or verses, make sure to right-click and use the "Merge Formatting" (the middle option)!**
 
 @Recited or Read
 Recited: verse was recited from memory.
