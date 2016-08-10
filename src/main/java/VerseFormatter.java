@@ -3,6 +3,12 @@ import java.io.IOException;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+
+/**
+ * 2016/08/10
+ * @author Eric Shim
+ * @version 1.1
+ */
 public class VerseFormatter {
 
     private Bible bible;

@@ -8,6 +8,11 @@ import java.awt.Toolkit;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * 2016/08/10
+ * @author Eric Shim
+ * @version 1.1
+ */
 public final class ClipboardTransfer implements ClipboardOwner {
 	//Creates the RTF string 
 	private static final String RTF_STRING = "{\\rtf1\\ansi\\deff0\r\n{\\colortbl;\\red0\\green0\\blue0;\\red255\\green0\\blue0;}\r\nThis line is the default color\\line\r\n\\cf2\r\nThis line is red\\line\r\n\\cf1\r\nThis line is the default color\r\n}\r\n}";

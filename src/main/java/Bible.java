@@ -4,6 +4,11 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * 2015/12/15
+ * @author Eric Shim
+ * @version 1.0
+ */
 public class Bible {
     private String koreanFileName = "KoreanVer.txt";
 	private String englishFileName = "NKJVer.txt";
