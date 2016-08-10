@@ -6,6 +6,11 @@ Please take note that there are special cases in which the content of one langua
 Ex> Ephesians 3:19 -- The mention of the dimensions of grace are mentioned in different verse numbers for Korean and English.
 In these cases you must manually copy down the verses and edit them.
 
+@Recited or Read
+Recited: verse was recited from memory.
+
+Read: verse was found together with the audience.
+
 @Before or After
 Before: verse location is said before the recited verse.
 
