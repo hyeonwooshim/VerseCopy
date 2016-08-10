@@ -2,6 +2,8 @@ import java.io.IOException;
 
 import javafx.application.Application;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
@@ -13,6 +15,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +43,9 @@ public class VerseCopier extends Application {
     private Information info;
 
     // ChoiceBox<String> beforeOrAfter; (took out to have radio buttons instead)
+	private ToggleGroup recOrReadGroup;
+    private RadioButton rb3;
+    private RadioButton rb4;
     private ToggleGroup befAftGroup;
     private RadioButton rb1;
     private RadioButton rb2;
@@ -94,12 +100,22 @@ public class VerseCopier extends Application {
         copyButton = new Button("Copy Verse");
         copyButton.setDefaultButton(true);
         copyButton.setOnAction(event -> {
-                clipper.setClipboardContents(formatter.getVerses(getBook(),
-                    getChapterNumber(), getBeginningVerseNumber(),
-                    getEndingVerseNumber(), getBeforeOrAfter()));
+				if (getRecitedOrRead()) {
+				
+					clipper.setClipboardContents(formatter.getVerses(getBook(),
+						getChapterNumber(), getBeginningVerseNumber(),
+						getEndingVerseNumber(), getBeforeOrAfter()));
 
-                status.setText("COPIED");
-                rb1.requestFocus();
+					status.setText("COPIED");
+					rb1.requestFocus();
+				} else {
+					clipper.setClipboardContents(formatter.getNumberedVerses(getBook(),
+						getChapterNumber(), getBeginningVerseNumber(),
+						getEndingVerseNumber()));
+
+					status.setText("COPIED");
+					rb3.requestFocus();
+				}
             });
         copyButton.setDisable(true);
         hbox.getChildren().addAll(status, copyButton);
@@ -119,6 +135,31 @@ public class VerseCopier extends Application {
         beforeOrAfter.getSelectionModel().selectFirst(); // have default value
         beforeOrAfter.setPrefSize(70, 30);
         */
+		
+        /** implement ToggleGroup and RadioButtons **/
+        recOrReadGroup = new ToggleGroup();
+        rb3 = new RadioButton("Recited");
+        rb3.setUserData("Recited");
+        rb3.setToggleGroup(recOrReadGroup);
+        rb3.setSelected(true);
+        rb4 = new RadioButton("Read");
+        rb4.setUserData("Read");
+        rb4.setToggleGroup(recOrReadGroup);
+		recOrReadGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+			public void changed(ObservableValue<? extends Toggle> ov,
+				Toggle old_toggle, Toggle new_toggle) {
+				if (recOrReadGroup.getSelectedToggle() != null) {
+					if (recOrReadGroup.getSelectedToggle().getUserData().toString().equals("Read")) {
+						rb1.setDisable(true);
+						rb2.setDisable(true);
+					} else {
+						rb1.setDisable(false);
+						rb2.setDisable(false);
+					}
+				}
+			}
+		});
+        /*******************************************/
 
         /** implement ToggleGroup and RadioButtons **/
         befAftGroup = new ToggleGroup();
@@ -132,7 +173,11 @@ public class VerseCopier extends Application {
         /*******************************************/
 
         // have radio buttons and info icon together
-        HBox hbox = new HBox(rb1, rb2, makeInfoIcon());
+        HBox hbox2 = new HBox(rb3, rb4, makeInfoIcon());
+        hbox2.setSpacing(26);
+		
+        // have radio buttons and info icon together
+        HBox hbox = new HBox(rb1, rb2);
         hbox.setSpacing(30);
 
         // initialize text fields
@@ -153,7 +198,7 @@ public class VerseCopier extends Application {
 
         // add the textfields
         vbox1.getChildren().addAll(
-            hbox, bookName, chapNum, verse1, verse2
+            hbox2, hbox, bookName, chapNum, verse1, verse2
             );
 
         // event of enter key ()
@@ -175,7 +220,8 @@ public class VerseCopier extends Application {
         vbox3.setPadding(new Insets(15));
         vbox3.setSpacing(5);
 
-        Label befAft = new Label ("Bef or Aft:");
+		Label recOrRead = new Label("Recited or Read:");
+        Label befAft = new Label("Bef or Aft:");
         Label book = new Label("Book:");
         Label chapter = new Label("Chapter:");
         Label beginning = new Label("Beginning V:");
@@ -187,7 +233,8 @@ public class VerseCopier extends Application {
         beginning.setPrefSize(70, 30);
         end.setPrefSize(70, 30);
 
-        vbox3.getChildren().addAll(befAft, book, chapter, beginning, end);
+        vbox3.getChildren().addAll(
+			recOrRead, befAft, book, chapter, beginning, end);
 
         /*
         for (Node f : vbox3.getChildren()) {
@@ -242,6 +289,11 @@ public class VerseCopier extends Application {
     }
 
     /********* Get Methods ***********/
+	private boolean getRecitedOrRead() {
+        // return beforeOrAfter.getValue().equals("Before");
+        return recOrReadGroup.getSelectedToggle().getUserData().equals("Recited");
+    }
+	
     private boolean getBeforeOrAfter() {
         // return beforeOrAfter.getValue().equals("Before");
         return befAftGroup.getSelectedToggle().getUserData().equals("Before");

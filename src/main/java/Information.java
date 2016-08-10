@@ -78,6 +78,7 @@ public class Information {
     public void initTextArea() {
         textArea = new TextArea(infos.get(0));
         textArea.setWrapText(true);
+		textArea.setEditable(false);
     }
 
     public void readFile() throws IOException {
