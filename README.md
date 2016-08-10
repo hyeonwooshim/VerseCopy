@@ -9,19 +9,23 @@ This application copies bible verses in English (New King James Version) and Kor
 THE FORMAT (RECITED) IS: (depending on whether the pastor speaks of the location of the verse before reciting or after)
 
 (책이름 장#:절#-절#) 구절
+
 (BookName Ch#:Vs#-Vs#) Verse Content
 
 Or
 
 구절 (책이름 장#:절#-절#)
+
 Verse Content (BookName Ch#:Vs#-Vs#)
+
 
 
 
 THE FORMAT (READ) IS: (depending on whether the pastor speaks of the location of the verse before reciting or after)
 
 "책이름 장#:절#-절#"	"BookName Ch#:Vs#-Vs#"
-구절					VerseContent
+
+        구절       |   VerseContent
 
 
 TO USE:
