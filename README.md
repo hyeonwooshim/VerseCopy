@@ -19,7 +19,7 @@ Or
 
 
 
-THE FORMAT (READ) IS: (depending on whether the pastor speaks of the location of the verse before reciting or after)
+THE FORMAT (READ) IS:
 
         "책이름 장#:절#-절#"	"BookName Ch#:Vs#-Vs#"
                구절        |     VerseContent
