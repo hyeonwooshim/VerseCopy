@@ -8,7 +8,7 @@ Author: Eric (Hyeon Woo) Shim
 
 
 VerseCopier is a Java application allows users to copy and paste Bible verses with a specific format fit for JBCH Wednesday sermons.
-This application copies bible verses in English (New King James Version) and Korean (개역한글) to aid translators/interpretors who is translating a prerecorded sermon to accurately convey the verses recited or read by the pastor.
+This application copies bible verses in English (New King James Version) and Korean (개역한글) to aid translators/interpreters who is translating a prerecorded sermon to accurately convey the verses recited or read by the pastor.
 
 ### Format of Recited Verses
 (depending on whether the pastor mentions the location of the verse before reciting or after)
