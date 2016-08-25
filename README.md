@@ -1,6 +1,6 @@
 # VerseCopier
 
-![Version 1.1 Screenshot](/relative/images/screenshot_1.1.png?raw=true "Screenshot")
+![Version 1.1 Screenshot](/images/screenshot_1.1.png?raw=true "Screenshot")
 
 ver 1.1 (added read-verse copy feature)
 
@@ -32,4 +32,4 @@ Or
 
 ## To Use
 
-Download from the repository the zip file VerseCopier.zip and unzip it into a single folder. Make sure you have Java (Java Runtime Environment) installed! You can run the application by double-clicking on VerseCopier.jar.
+Download from the repository the zip file VerseCopier.zip and unzip it into a single folder. **Make sure you have Java (Java Runtime Environment) installed!** You can run the application by double-clicking on VerseCopier.jar.
