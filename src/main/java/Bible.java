@@ -5,6 +5,13 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
+ * This Object reads in the Korean and English text of the Bible,
+ * and stores it as 3D String arrays with each dimension representing
+ * the book, chapter, and verse, respectively.
+ * The names of the files are hard-coded at the moment, but
+ * can be easily changed to allow the names to be parameters
+ * in the constructor.
+ *
  * 2015/12/15
  * @author Eric Shim
  * @version 1.0
@@ -23,7 +30,12 @@ public class Bible {
 	BufferedReader inKorean;
     FileInputStream nkjv;
 	BufferedReader inEnglish;
-
+	
+	/*
+	 * Default constructor that initializes this Bible
+	 * by storing the English and Korean texts in the
+	 * 3D String arrays.
+	 */
     public Bible() throws IOException {
         allVersesEng = new String[totalNumberOfVerses];
         allVersesKor = new String[totalNumberOfVerses];
@@ -65,10 +77,10 @@ public class Bible {
     /**
     * Returns the line of English version at book #, chapter #, and verse #
     *
-    * @param book
-    * @param chap
-    * @param verse
-    * @return the line
+    * @param book	book number
+    * @param chap	chapter number
+    * @param verse	verse number
+    * @return the corresponding line of text
     */
     public String getEngLineAt(int book, int chap, int verse) {
         return engBook[book][chap][verse];
@@ -77,15 +89,22 @@ public class Bible {
     /**
     * Returns the line of Korean version at book #, chapter #, and verse #
     *
-    * @param book
-    * @param chap
-    * @param verse
-    * @return the line
+    * @param book	book number
+    * @param chap	chapter number
+    * @param verse	verse number
+    * @return the corresponding line of text
     */
     public String getKorLineAt(int book, int chap, int verse) {
         return korBook[book][chap][verse];
     }
-
+	
+	/**
+	 * Checks if a chapter is valid given the book.
+	 *
+	 * @param book	book number
+     * @param chap	chapter number
+	 * @return true if book has that chapter number
+	 */
     public boolean validChapter(int book, int chap) {
         if (chap <= 0) {
             return false;
@@ -95,7 +114,15 @@ public class Bible {
             return true;
         }
     }
-
+	
+	/**
+	 * Checks if a chapter is valid given the book.
+	 *
+	 * @param book	book number
+     * @param chap	chapter number
+     * @param verse	verse number
+	 * @return true if book has that verse
+	 */
     public boolean validVerse(int book, int chap, int verse) {
         if (!validChapter(book, chap)) {
             return false;
@@ -112,7 +139,8 @@ public class Bible {
 
 
     /**
-    * Returns String of shortest possible input names for each book
+    * Returns String of shortest possible input names for each book.
+	* Used for initialization for the most part.
     *
     * @return string of shortest possible names
     */
@@ -132,7 +160,6 @@ public class Bible {
 
         return bests;
     }
-
 
 
     /**
@@ -487,5 +514,4 @@ public class Bible {
     			,"Jude"
     			,"Revelation"
     };
-
 }

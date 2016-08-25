@@ -5,6 +5,8 @@ import javafx.scene.text.Text;
 
 
 /**
+ * Formatter used for VerseCopier to format the
+ * verses in the desired form for JBCH Wednesday sermons.
  * 2016/08/10
  * @author Eric Shim
  * @version 1.1
@@ -35,6 +37,16 @@ public class VerseFormatter {
         return korStr.substring(0, korStr.length() - 1);
     }
 
+	/**
+	 * Gets verses formatted as recited verses.
+	 *
+	 * @param book		book name
+     * @param chap		chapter number
+     * @param verse1	starting verse number
+	 * @param verse2	ending verse number
+	 * @param saidBefore	whether the verse location was mentioned before recitation
+	 * @return String with verses formatted as recited verses.
+	 */
     public String getVerses(String book, int chap, int verse1, int verse2,
         boolean saidBefore) {
         int bookNum = bible.findBook(book);
@@ -68,6 +80,7 @@ public class VerseFormatter {
     }
 	
 	/** Methods for getting numbered lines (made for Microsoft Word) **/
+	
 	public String getHtmlNumberedEngLines(int bookNum, int chap,
         int verse1, int verse2) {
         String engStr = "";
@@ -89,7 +102,12 @@ public class VerseFormatter {
     }
 
 	/**
+	 * Gets verses formatted as read verses.
 	 *
+	 * @param book		book name
+     * @param chap		chapter number
+     * @param verse1	starting verse number
+	 * @param verse2	ending verse number
 	 * @return HTML formatted 2-column table of the Korean verses in first
 	 * 			column and the English verses in the second column.
 	 */
