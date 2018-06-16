@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 From the root directory:
 
 To compile: javac ./src/main/java/*.java -encoding utf8

@@ -37,3 +37,4 @@ Or
 ## To Use
 
 Download from the repository the .zip file VerseCopier.zip and unzip it into a single folder. **Make sure you have Java (Java Runtime Environment) installed!** You can run the application by double-clicking on VerseCopier.jar.
+

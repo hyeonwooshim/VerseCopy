@@ -34,11 +34,11 @@ public class VerseFormatter {
   /**
    * Gets verses formatted as recited verses.
    *
-   * @param book		book name
-   * @param chap		chapter number
-   * @param verse1	starting verse number
-   * @param verse2	ending verse number
-   * @param saidBefore	whether the verse location was mentioned before recitation
+   * @param book book name
+   * @param chap chapter number
+   * @param verse1 starting verse number
+   * @param verse2 ending verse number
+   * @param saidBefore whether the verse location was mentioned before recitation
    * @return String with verses formatted as recited verses.
    */
   public String getVerses(String book, int chap, int verse1, int verse2,
@@ -73,7 +73,9 @@ public class VerseFormatter {
     return korStr + "\n" + engStr;
   }
 
-  /** Methods for getting numbered lines (made for Microsoft Word) **/
+  /**
+   * Methods for getting numbered lines (made for Microsoft Word)
+   **/
 
   public String getHtmlNumberedEngLines(int bookNum, int chap,
       int verse1, int verse2) {
@@ -98,12 +100,12 @@ public class VerseFormatter {
   /**
    * Gets verses formatted as read verses.
    *
-   * @param book		book name
-   * @param chap		chapter number
-   * @param verse1	starting verse number
-   * @param verse2	ending verse number
-   * @return HTML formatted 2-column table of the Korean verses in first
-   * 			column and the English verses in the second column.
+   * @param book book name
+   * @param chap chapter number
+   * @param verse1 starting verse number
+   * @param verse2 ending verse number
+   * @return HTML formatted 2-column table of the Korean verses in first column and the English
+   * verses in the second column.
    */
   public String getHtmlNumberedVerses(String book, int chap, int verse1, int verse2) {
     int bookNum = bible.findBook(book);
