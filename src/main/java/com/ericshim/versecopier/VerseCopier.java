@@ -1,3 +1,8 @@
+package com.ericshim.versecopier;
+
+import com.ericshim.bible.Bible;
+import com.ericshim.bible.KoreanBible;
+import com.ericshim.bible.NkjvBible;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -26,13 +31,14 @@ import javafx.stage.Stage;
 /**
  * 2016/08/10
  * @author Eric Shim
- * @version 1.1
  */
 public class VerseCopier extends Application {
 
   private ClipboardTransfer clipper = new ClipboardTransfer();
   private VerseFormatter formatter;
   private Bible bible;
+  private Bible korBible;
+  private Bible engBible;
   private Information info;
 
   // ChoiceBox<String> beforeOrAfter; (took out to have radio buttons instead)
@@ -54,8 +60,9 @@ public class VerseCopier extends Application {
   @Override
   public void start(Stage stage) {
     try { //initialize bible, formatter, and info
-      bible = new Bible();
-      formatter = new VerseFormatter(bible);
+      korBible = new KoreanBible();
+      engBible = new NkjvBible();
+      formatter = new VerseFormatter(korBible, engBible);
       info = new Information("Information.txt");
     } catch (IOException e) {
       Alert alert = new Alert(AlertType.WARNING);
@@ -94,7 +101,7 @@ public class VerseCopier extends Application {
     copyButton.setDefaultButton(true);
     copyButton.setOnAction(event -> {
       if (getRecitedOrRead()) {
-        clipper.setClipboardContents(formatter.getVerses(getBook(),
+        clipper.setClipboardContents(formatter.formatVerses(getBook(),
             getChapterNumber(), getBeginningVerseNumber(),
             getEndingVerseNumber(), getBeforeOrAfter()));
 
@@ -131,7 +138,7 @@ public class VerseCopier extends Application {
         beforeOrAfter.setPrefSize(70, 30);
         */
 
-    /** implement ToggleGroup and RadioButtons **/
+    /* implement ToggleGroup and RadioButtons */
     recOrReadGroup = new ToggleGroup();
     rb3 = new RadioButton("Recited");
     rb3.setUserData("Recited");
@@ -154,9 +161,9 @@ public class VerseCopier extends Application {
         }
       }
     });
-    /*******************************************/
+    /* ******************************************/
 
-    /** implement ToggleGroup and RadioButtons **/
+    /* implement ToggleGroup and RadioButtons */
     befAftGroup = new ToggleGroup();
     rb1 = new RadioButton("Before");
     rb1.setUserData("Before");
@@ -165,7 +172,7 @@ public class VerseCopier extends Application {
     rb2 = new RadioButton("After");
     rb2.setUserData("After");
     rb2.setToggleGroup(befAftGroup);
-    /*******************************************/
+    /* ******************************************/
 
     // have radio buttons and info icon together
     HBox hbox2 = new HBox(rb3, rb4, makeInfoIcon());
@@ -299,7 +306,7 @@ public class VerseCopier extends Application {
   }
 
   private int getBookNumber() {
-    return bible.findBook(bookName.getText());
+    return formatter.getBookIndex(bookName.getText());
   }
 
   private int getChapterNumber() {
@@ -336,15 +343,15 @@ public class VerseCopier extends Application {
   }
 
   private boolean checkChapter() {
-    return bible.validChapter(getBookNumber(), getChapterNumber());
+    return formatter.validChapter(getBookNumber(), getChapterNumber());
   }
 
   private boolean checkVerseNumbers() {
     int v1 = getBeginningVerseNumber();
     int v2 = getEndingVerseNumber();
 
-    if (!bible.validVerse(getBookNumber(), getChapterNumber(), v1)
-        || !bible.validVerse(getBookNumber(), getChapterNumber(), v2)) {
+    if (!formatter.validVerse(getBookNumber(), getChapterNumber(), v1)
+        || !formatter.validVerse(getBookNumber(), getChapterNumber(), v2)) {
       return false;
     } else if (v1 > v2) {
       return false;
@@ -356,7 +363,7 @@ public class VerseCopier extends Application {
 
   /**
    * Static void main method
-   * @param args
+   * @param args arguments
    */
   public static void main(String[] args) {
     launch(args);

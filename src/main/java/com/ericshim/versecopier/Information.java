@@ -1,3 +1,5 @@
+package com.ericshim.versecopier;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,7 +59,7 @@ public class Information {
   public void readFile() throws IOException {
     InputStream korean;
     BufferedReader inKorean;
-    korean = Information.class.getResourceAsStream(fileName);
+    korean = Information.class.getResourceAsStream('/' + fileName);
     inKorean = new BufferedReader(new InputStreamReader(korean, "UTF8"));
 
     String line = inKorean.readLine();

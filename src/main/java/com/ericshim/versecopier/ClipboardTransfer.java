@@ -1,3 +1,5 @@
+package com.ericshim.versecopier;
+
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -16,7 +18,6 @@ import java.util.ArrayList;
 /**
  * 2016/08/10
  * @author Eric Shim
- * @version 1.1
  */
 public final class ClipboardTransfer implements ClipboardOwner {
   //Creates the RTF string
