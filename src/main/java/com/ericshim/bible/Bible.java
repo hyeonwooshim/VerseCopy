@@ -53,8 +53,8 @@ public abstract class Bible {
    * Returns a -1 if book is not found. Default behavior is to check for lower-case
    * substrings.
    *
-   * @param book    name of the book
-   * @return the index of the book
+   * @param book name of the book or part of it
+   * @return the index of the book (0~65), -1 if not found
    */
   public int getBookIndex(String book) {
     if (book.isEmpty()) return -1;
@@ -130,14 +130,13 @@ public abstract class Bible {
     }
 
     int previousVerse = 0;
-    int currentVerse = 1;
 
     // Process first line of the file
     String line = bibleReader.readLine();
     String oneLine = line.substring(1);
     oneLine = oneLine.replaceAll("[^0-9]+", " "); // Returns all integers in it
     String[] d = oneLine.trim().split(" ");
-    currentVerse = Integer.parseInt(d[1]);
+    int currentVerse = Integer.parseInt(d[1]);
 
     int num = 1; // Keep track of how many lines we've read
     for (int i = 0; i < 66; i++) { // for each book

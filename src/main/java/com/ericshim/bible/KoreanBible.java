@@ -50,7 +50,11 @@ public class KoreanBible extends Bible {
     for(int i = 0; i < LIST_KOR_SHORT.length; i++){
       if (LIST_KOR_SHORT[i].equals(book)) return i;
     }
-    return super.getBookIndex(book);
+
+    for(int i = 0; i < LIST_KOR_LONG.length; i++){
+      if (LIST_KOR_LONG[i].contains(book)) return i;
+    }
+    return -1;
   }
 
   private static final String[] LIST_KOR_SHORT = {
