@@ -36,14 +36,25 @@ public abstract class Bible {
    */
   public abstract String[] getBookNames();
 
+  /**
+   * @return array of all the shorter versions the books' names
+   */
   public String[] getShortenedBookNames() {
     return getBookNames();
   }
 
+  /**
+   * @param book index of the book
+   * @return full name of the book
+   */
   public String getBookName(int book) {
     return getBookNames()[book];
   }
 
+  /**
+   * @param book index of the book
+   * @return shorter name of the book
+   */
   public String getShortenedBookName(int book) {
     return getShortenedBookNames()[book];
   }

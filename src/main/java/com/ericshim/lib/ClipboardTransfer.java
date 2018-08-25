@@ -1,4 +1,4 @@
-package com.ericshim.versecopier;
+package com.ericshim.lib;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;

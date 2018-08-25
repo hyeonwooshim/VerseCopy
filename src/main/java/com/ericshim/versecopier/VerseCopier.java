@@ -3,6 +3,7 @@ package com.ericshim.versecopier;
 import com.ericshim.bible.Bible;
 import com.ericshim.bible.KoreanBible;
 import com.ericshim.bible.NkjvBible;
+import com.ericshim.lib.ClipboardTransfer;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
