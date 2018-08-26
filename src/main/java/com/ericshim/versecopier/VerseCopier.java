@@ -4,6 +4,7 @@ import com.ericshim.bible.Bible;
 import com.ericshim.bible.KoreanBible;
 import com.ericshim.bible.NkjvBible;
 import com.ericshim.lib.ClipboardTransfer;
+import com.ericshim.versecopier.controller.CopyHistoryViewController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -56,6 +57,8 @@ public class VerseCopier extends Application {
   private Label status;
   private Button copyButton;
 
+  private CopyHistoryViewController historyViewController;
+
   private Stage infoStage;
 
   @Override
@@ -72,11 +75,16 @@ public class VerseCopier extends Application {
       alert.showAndWait();
     }
 
+    historyViewController = new CopyHistoryViewController(null);
+
     // set up BorderPane with other nodes
     BorderPane bPane = new BorderPane();
     bPane.setLeft(getVBoxLabels());
     bPane.setCenter(getVBoxTextField());
     bPane.setBottom(getHBox());
+    bPane.setRight(historyViewController.getHistoryView());
+
+    bPane.setPadding(new Insets(10));
 
     Scene scene = new Scene(bPane);
     stage.setScene(scene);
@@ -92,7 +100,7 @@ public class VerseCopier extends Application {
   // initializes label and copyButton
   private HBox getHBox() {
     HBox hbox = new HBox();
-    hbox.setPadding(new Insets(15));
+    hbox.setPadding(new Insets(5));
     hbox.setSpacing(10);
 
     status = new Label("Start Typing");
@@ -119,6 +127,8 @@ public class VerseCopier extends Application {
         status.setText("COPIED");
         rb3.requestFocus();
       }
+      historyViewController.addHistoryItem(formatter.getBookIndex(getBook()),
+          getChapterNumber(), getBeginningVerseNumber(), getEndingVerseNumber());
     });
     copyButton.setDisable(true);
     hbox.getChildren().addAll(status, copyButton);
@@ -129,7 +139,7 @@ public class VerseCopier extends Application {
   // initializes text fields
   private VBox getVBoxTextField() {
     VBox vbox1 = new VBox();
-    vbox1.setPadding(new Insets(15));
+    vbox1.setPadding(new Insets(5));
     vbox1.setSpacing(5);
 
         /* Replaced by radiobuttons
@@ -220,7 +230,7 @@ public class VerseCopier extends Application {
   private VBox getVBoxLabels() {
     VBox vbox3 = new VBox();
 
-    vbox3.setPadding(new Insets(15));
+    vbox3.setPadding(new Insets(5));
     vbox3.setSpacing(5);
 
     Label recOrRead = new Label("Recited or Read:");
