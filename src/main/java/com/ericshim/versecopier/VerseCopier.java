@@ -3,8 +3,10 @@ package com.ericshim.versecopier;
 import com.ericshim.bible.Bible;
 import com.ericshim.bible.KoreanBible;
 import com.ericshim.bible.NkjvBible;
+import com.ericshim.helper.Printer;
 import com.ericshim.lib.ClipboardTransfer;
 import com.ericshim.versecopier.controller.CopyHistoryViewController;
+
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -38,7 +40,6 @@ public class VerseCopier extends Application {
 
   private ClipboardTransfer clipper = new ClipboardTransfer();
   private VerseFormatter formatter;
-  private Bible bible;
   private Bible korBible;
   private Bible engBible;
   private Information info;
@@ -61,11 +62,17 @@ public class VerseCopier extends Application {
 
   private Stage infoStage;
 
+  private int book = 0;
+  private int chapter = 1;
+  private int beginningVerse = 1;
+  private int endingVerse = 1;
+
   @Override
   public void start(Stage stage) {
     try { //initialize bible, formatter, and info
       korBible = new KoreanBible();
       engBible = new NkjvBible();
+      if (!checkIfBiblesEqual(korBible, engBible)) throw new IOException();
       formatter = new VerseFormatter(korBible, engBible);
       info = new Information("Information.txt");
     } catch (IOException e) {
@@ -93,8 +100,6 @@ public class VerseCopier extends Application {
 
     //initialize info stage
     initializeInfo();
-
-
   }
 
   // initializes label and copyButton
@@ -110,25 +115,20 @@ public class VerseCopier extends Application {
     copyButton.setDefaultButton(true);
     copyButton.setOnAction(event -> {
       if (getRecitedOrRead()) {
-        clipper.setClipboardContents(formatter.formatVerses(getBook(),
-            getChapterNumber(), getBeginningVerseNumber(),
-            getEndingVerseNumber(), getBeforeOrAfter()));
-
-        status.setText("COPIED");
+        clipper.setClipboardContents(
+            formatter.formatVerses(getBook(), chapter, beginningVerse, endingVerse,
+                getBeforeOrAfter()));
         rb1.requestFocus();
-
       } else {
         clipper.setClipboardHtmlContents(
-            formatter.getHtmlNumberedVerses(getBook(),
-                getChapterNumber(), getBeginningVerseNumber(),
-                getEndingVerseNumber())
+            formatter.getHtmlNumberedVerses(getBook(), chapter, beginningVerse, endingVerse)
         );
-
-        status.setText("COPIED");
         rb3.requestFocus();
       }
       historyViewController.addHistoryItem(formatter.getBookIndex(getBook()),
-          getChapterNumber(), getBeginningVerseNumber(), getEndingVerseNumber());
+          getChapterNumber(), getBeginningVerseNumber(),
+          getEndingVerseNumber() - getBeginningVerseNumber());
+      status.setText("COPIED");
     });
     copyButton.setDisable(true);
     hbox.getChildren().addAll(status, copyButton);
@@ -142,12 +142,12 @@ public class VerseCopier extends Application {
     vbox1.setPadding(new Insets(5));
     vbox1.setSpacing(5);
 
-        /* Replaced by radiobuttons
-        beforeOrAfter = new ChoiceBox<String>();
-        beforeOrAfter.getItems().addAll("Before", "After");
-        beforeOrAfter.getSelectionModel().selectFirst(); // have default value
-        beforeOrAfter.setPrefSize(70, 30);
-        */
+    /* Replaced by radiobuttons
+    beforeOrAfter = new ChoiceBox<String>();
+    beforeOrAfter.getItems().addAll("Before", "After");
+    beforeOrAfter.getSelectionModel().selectFirst(); // have default value
+    beforeOrAfter.setPrefSize(70, 30);
+    */
 
     /* implement ToggleGroup and RadioButtons */
     recOrReadGroup = new ToggleGroup();
@@ -204,10 +204,10 @@ public class VerseCopier extends Application {
     verse1.setPrefSize(130, 30);
     verse2.setPrefSize(130, 30);
 
-    bookName.textProperty().addListener((a, b, newValue) -> {determineState();});
-    chapNum.textProperty().addListener((a, b, newValue) -> {determineState();});
-    verse1.textProperty().addListener((a, b, newValue) -> {determineState();});
-    verse2.textProperty().addListener((a, b, newValue) -> {determineState();});
+    bookName.textProperty().addListener((a, b, newValue) -> { updateState(); });
+    chapNum.textProperty().addListener((a, b, newValue) -> { updateState(); });
+    verse1.textProperty().addListener((a, b, newValue) -> { updateState(); });
+    verse2.textProperty().addListener((a, b, newValue) -> { updateState(); });
 
     // add the textfields
     vbox1.getChildren().addAll(
@@ -215,15 +215,15 @@ public class VerseCopier extends Application {
     );
 
     // event of enter key ()
-        /* made unnecessary by copyButton.setDefaultButton(true);
-        for (Node f : vbox1.getChildren()) {
-            f.setOnKeyReleased(event -> {
-                    if (event.getCode() == KeyCode.ENTER){
-                        copyButton.fire();
-                    }
-                });
-        }
-        */
+    /* made unnecessary by copyButton.setDefaultButton(true);
+    for (Node f : vbox1.getChildren()) {
+        f.setOnKeyReleased(event -> {
+                if (event.getCode() == KeyCode.ENTER){
+                    copyButton.fire();
+                }
+            });
+    }
+    */
     return vbox1;
   }
 
@@ -249,11 +249,11 @@ public class VerseCopier extends Application {
     vbox3.getChildren().addAll(
         recOrRead, befAft, book, chapter, beginning, end);
 
-        /*
-        for (Node f : vbox3.getChildren()) {
-            Label l = (Label) f;
-            l.setTextAlignment(TextAlignment.RIGHT);
-        } */
+    /*
+    for (Node f : vbox3.getChildren()) {
+        Label l = (Label) f;
+        l.setTextAlignment(TextAlignment.RIGHT);
+    } */
 
     return vbox3;
   }
@@ -285,20 +285,21 @@ public class VerseCopier extends Application {
     infoStage.setTitle("Verse Copier Information");
   }
 
-  private void determineState() {
+  private void updateState() {
+    boolean shouldDisable = true;
+    String msg;
     if (!checkBook()) {
-      copyButton.setDisable(true);
-      status.setText("Invalid book name.");
-    } else if (!checkChapter()){
-      copyButton.setDisable(true);
-      status.setText("Invalid chapter number.");
-    } else if (!checkVerseNumbers()) {
-      copyButton.setDisable(true);
-      status.setText("Invalid verse numbers.");
+      msg = "Invalid book name.";
+    } else if (!checkChapter(book)){
+      msg = "Invalid chapter number.";
+    } else if (!checkVerseNumbers(book, chapter)) {
+      msg = "Invalid verse numbers.";
     } else {
-      copyButton.setDisable(false);
-      status.setText("Copy Enabled.");
+      shouldDisable = false;
+      msg = "Copy Enabled.";
     }
+    copyButton.setDisable(shouldDisable);
+    status.setText(msg);
   }
 
   /********* Get Methods ***********/
@@ -329,16 +330,18 @@ public class VerseCopier extends Application {
   }
 
   private int getBeginningVerseNumber() {
-    try {
-      return Integer.parseInt(verse1.getText());
-    } catch (Exception e) {
-      return -1;
-    }
+    return getVerseNumberFromVerseField(verse1);
   }
 
   private int getEndingVerseNumber() {
+    return getVerseNumberFromVerseField(verse2);
+  }
+
+  private int getVerseNumberFromVerseField(TextField verseField) {
     try {
-      return Integer.parseInt(verse2.getText());
+      String input = verseField.getText();
+      if (input.trim().length() == 0) return 0;
+      return Integer.parseInt(input);
     } catch (Exception e) {
       return -1;
     }
@@ -346,29 +349,36 @@ public class VerseCopier extends Application {
 
   /********** Methods to check validity *************/
   private boolean checkBook() {
-    if (getBookNumber() == -1) {
-      return false;
-    } else {
-      return true;
-    }
+    book = getBookNumber();
+    return book >= 0;
   }
 
-  private boolean checkChapter() {
-    return formatter.validChapter(getBookNumber(), getChapterNumber());
+  private boolean checkChapter(int book) {
+    chapter = getChapterNumber();
+    return formatter.validChapter(book, chapter);
   }
 
-  private boolean checkVerseNumbers() {
-    int v1 = getBeginningVerseNumber();
-    int v2 = getEndingVerseNumber();
+  private boolean checkVerseNumbers(int book, int chapter) {
+    int beginning = getBeginningVerseNumber();
+    int ending = getEndingVerseNumber();
 
-    if (!formatter.validVerse(getBookNumber(), getChapterNumber(), v1)
-        || !formatter.validVerse(getBookNumber(), getChapterNumber(), v2)) {
-      return false;
-    } else if (v1 > v2) {
-      return false;
-    } else {
+    boolean validBeginning = formatter.validVerse(book, chapter, beginning);
+    boolean validEnding = formatter.validVerse(book, chapter, ending);
+
+    if (validBeginning && ending == 0) {
+      beginningVerse = beginning;
+      endingVerse = beginning;
+      return true;
+    } else if (beginning == 0 && validEnding) {
+      beginningVerse = ending;
+      endingVerse = ending;
+      return true;
+    } else if (validBeginning && validEnding && (beginning <= ending)) {
+      beginningVerse = beginning;
+      endingVerse = ending;
       return true;
     }
+    return false;
   }
 
 
@@ -378,6 +388,33 @@ public class VerseCopier extends Application {
    */
   public static void main(String[] args) {
     launch(args);
+  }
+
+  public static boolean checkIfBiblesEqual(Bible bible1, Bible bible2) {
+    String[][][] b1 = bible1.getFullIndexedBible();
+    String[][][] b2 = bible2.getFullIndexedBible();
+    if (b1.length != b2.length) {
+      Printer.out.println("Number of books different!");
+      return false;
+    }
+    boolean equal = true;
+    for (int i = 0; i < b1.length; i++) {
+      if (b1[i].length != b2[i].length) {
+        Printer.out.println("Number of chapters different for book: " + i);
+        equal = false;
+      }
+    }
+    if (!equal) return false;
+
+    for (int i = 0; i < b1.length; i++) {
+      for (int j = 0; j < b1[i].length; j++) {
+        if (b1[i][j].length != b2[i][j].length) {
+          Printer.out.println("Number of verses different for: " + i + "," + j);
+          equal = false;
+        }
+      }
+    }
+    return equal;
   }
 
 

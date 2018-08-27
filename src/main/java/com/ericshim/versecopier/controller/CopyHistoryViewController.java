@@ -28,6 +28,6 @@ public class CopyHistoryViewController {
 
   public void addHistoryItem(int bookIndex, int chapter, int verse, int offset) {
     CopiedInfo info = new CopiedInfo(bookIndex, chapter, verse, offset);
-    if (history.get(0) != info) history.add(0, info);
+    if (history.isEmpty() || !history.get(0).equals(info)) history.add(0, info);
   }
 }

@@ -1,4 +1,4 @@
-﻿@General
+@General
 This is a simple application to copy verses down in the Wednesday Sermon Format.
 
 Please take note that there are special cases in which the content of one language are not located in the corresponding place of that of the other language.
