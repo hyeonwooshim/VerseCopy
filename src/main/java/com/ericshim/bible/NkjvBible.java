@@ -22,7 +22,7 @@ public class NkjvBible extends Bible {
     super(new BufferedReader(
         new InputStreamReader(
             NkjvBible.class.getResourceAsStream('/' + FILE_NAME),
-            "UTF8"
+            "UTF-8"
         )
     ));
   }
@@ -34,7 +34,23 @@ public class NkjvBible extends Bible {
 
   @Override
   public String[] getBookNames() {
-    return LIST_NKJV;
+    return LIST_NKJV_LONG;
+  }
+
+  @Override
+  public String[] getShortenedBookNames() {
+    return LIST_NKJV_SHORT;
+  }
+
+  @Override
+  public int getBookIndex(String book) {
+    if (book.isEmpty()) return -1;
+
+    // First check through the abbreviations.
+    for(int i = 0; i < LIST_NKJV_SHORT.length; i++){
+      if (LIST_NKJV_SHORT[i].equalsIgnoreCase(book)) return i;
+    }
+    return super.getBookIndex(book);
   }
 
   /**
@@ -44,10 +60,9 @@ public class NkjvBible extends Bible {
    * @return string of shortest possible names
    */
   public String[] getShortestPossibleEnglishNames() {
-    String[] bests = new String[LIST_NKJV.length];
-    for (int i = 0; i < LIST_NKJV.length; i++) {
-      String best = "";
-      String name = LIST_NKJV[i];
+    String[] bests = new String[LIST_NKJV_LONG.length];
+    for (int i = 0; i < LIST_NKJV_LONG.length; i++) {
+      String name = LIST_NKJV_LONG[i];
       for (int j = 1; j <= name.length(); j++) {
         String sub = name.substring(0, j);
         if (getBookIndex(sub) == i) {
@@ -60,7 +75,7 @@ public class NkjvBible extends Bible {
     return bests;
   }
 
-  private static final String[] LIST_NKJV = {
+  private static final String[] LIST_NKJV_LONG = {
       "Genesis",
       "Exodus",
       "Leviticus",
@@ -79,7 +94,7 @@ public class NkjvBible extends Bible {
       "Nehemiah",
       "Esther",
       "Job",
-      "Psalm",
+      "Psalms",
       "Proverbs",
       "Ecclesiastes",
       "Song of Solomon",
@@ -127,5 +142,74 @@ public class NkjvBible extends Bible {
       "3 John",
       "Jude",
       "Revelation",
+  };
+
+  private static final String[] LIST_NKJV_SHORT = {
+      "Gen",
+      "Ex",
+      "Lev",
+      "Num",
+      "Deut",
+      "Josh",
+      "Judg",
+      "Ruth",
+      "1Sam",
+      "2Sam",
+      "1Kin",
+      "2Kin",
+      "1Chr",
+      "2Chr",
+      "Ezra",
+      "Neh",
+      "Esther",
+      "Job",
+      "Ps",
+      "Prov",
+      "Eccles",
+      "Song",
+      "Is",
+      "Jer",
+      "Lam",
+      "Ezek",
+      "Dan",
+      "Hos",
+      "Joel",
+      "Amos",
+      "Obad",
+      "Jonah",
+      "Mic",
+      "Nah",
+      "Hab",
+      "Zeph",
+      "Hag",
+      "Zech",
+      "Mal",
+      "Matt",
+      "Mark",
+      "Luke",
+      "John",
+      "Acts",
+      "Rom",
+      "1Cor",
+      "2Cor",
+      "Gal",
+      "Eph",
+      "Phil",
+      "Col",
+      "1Thess",
+      "2Thess",
+      "1Tim",
+      "2Tim",
+      "Titus",
+      "Philem",
+      "Heb",
+      "James",
+      "1Pet",
+      "2Pet",
+      "1John",
+      "2John",
+      "3John",
+      "Jude",
+      "Rev",
   };
 }

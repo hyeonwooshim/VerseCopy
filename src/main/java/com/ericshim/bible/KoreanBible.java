@@ -22,7 +22,7 @@ public class KoreanBible extends Bible {
     super(new BufferedReader(
         new InputStreamReader(
             KoreanBible.class.getResourceAsStream('/' + FILE_NAME),
-            "UTF8"
+            "UTF-8"
         )
     ));
   }
@@ -50,7 +50,10 @@ public class KoreanBible extends Bible {
     for(int i = 0; i < LIST_KOR_SHORT.length; i++){
       if (LIST_KOR_SHORT[i].equals(book)) return i;
     }
-    return super.getBookIndex(book);
+    for(int i = 0; i < LIST_KOR_LONG.length; i++){
+      if (LIST_KOR_LONG[i].contains(book)) return i;
+    }
+    return -1;
   }
 
   private static final String[] LIST_KOR_SHORT = {
@@ -116,7 +119,7 @@ public class KoreanBible extends Bible {
       "벧전",
       "벧후",
       "요일",
-      "요일",
+      "요이",
       "요삼",
       "유",
       "계",
@@ -133,14 +136,14 @@ public class KoreanBible extends Bible {
       "룻기",
       "사무엘상",
       "사무엘하",
-      "열왕기",
-      "열왕기",
-      "역대기",
-      "역대기",
+      "열왕기상",
+      "열왕기하",
+      "역대기상",
+      "역대기하",
       "에스라",
       "느헤미",
       "에스더",
-      "옵기",
+      "욥기",
       "시편",
       "잠언",
       "전도서",
@@ -162,5 +165,32 @@ public class KoreanBible extends Bible {
       "학개",
       "스가랴",
       "말라기",
+      "마태복음",
+      "마가복음",
+      "누가복음",
+      "요한복음",
+      "사도행전",
+      "로마서",
+      "고린도전서",
+      "고린도후서",
+      "갈라디아서",
+      "에베소서",
+      "빌립보서",
+      "골로새서",
+      "데살로니가전서",
+      "데살로니가후서",
+      "디모데전서",
+      "디모데후서",
+      "디도서",
+      "빌레몬서",
+      "히브리서",
+      "야고보서",
+      "베드로전서",
+      "베드로후서",
+      "요한일서",
+      "요한이서",
+      "요한삼서",
+      "유다서",
+      "요한계시록",
   };
 }

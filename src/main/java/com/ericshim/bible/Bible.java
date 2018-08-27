@@ -2,8 +2,9 @@ package com.ericshim.bible;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.IntStream;
+import java.util.List;
 
 /**
  * This abstract class by default reads in a text file of a version of the bible,
@@ -13,7 +14,7 @@ import java.util.stream.IntStream;
  * @author Eric Shim
  */
 public abstract class Bible {
-  private String[][][] indexedBook = null;
+  private String[][][] indexedBible = null;
 
   /**
    * Constructor in the case for text files with each line being a verse.
@@ -23,7 +24,9 @@ public abstract class Bible {
    */
   public Bible(BufferedReader bibleReader) throws IOException {
     if (bibleReader == null) return;
-    indexedBook = readBible(bibleReader);
+    int i = 0;
+    String[] bns = getBookNames();
+    indexedBible = readBible(bibleReader);
   }
 
   /**
@@ -46,6 +49,10 @@ public abstract class Bible {
 
   public String getShortenedBookName(int book) {
     return getShortenedBookNames()[book];
+  }
+
+  public String[][][] getFullIndexedBible() {
+    return indexedBible;
   }
 
   /**
@@ -93,7 +100,7 @@ public abstract class Bible {
   }
 
   public String[] chapter(int book, int chapter) {
-    return indexedBook[book][chapter - 1];
+    return indexedBible[book][chapter - 1];
   }
 
   /**
@@ -105,13 +112,17 @@ public abstract class Bible {
    * @return the corresponding line of text
    */
   public String verse(int book, int chapter, int verse) {
-    return indexedBook[book][chapter - 1][verse - 1];
+    return indexedBible[book][chapter - 1][verse - 1];
   }
 
   public String[] verses(int book, int chapter, int verse1, int verse2) {
-    String[] verses = new String[verse2 - verse1 + 1];
-    for (int i = verse1; i <= verse2; i++) {
-      verses[i - verse1] = verse(book, chapter, i);
+    return versesFrom(book, chapter, verse1, verse2 - verse1);
+  }
+
+  public String[] versesFrom(int book, int chapter, int verse, int offset) {
+    String[] verses = new String[offset + 1];
+    for (int i = 0; i <= offset; i++) {
+      verses[i] = verse(book, chapter, verse + i);
     }
     return verses;
   }
@@ -125,49 +136,28 @@ public abstract class Bible {
   private String[][][] readBible(BufferedReader bibleReader) throws IOException {
     // Create jagged 3D array of all the lines
     String[][][] book = new String[NUM_BOOKS][][]; // Number of books
+    int[][] numVerses = new int[NUM_BOOKS][];
     for (int i = 0; i < NUM_BOOKS; i++) { // Assign correct number of chapters
       book[i] = new String[NUM_CHAPTERS[i]][];
-    }
-
-    int previousVerse = 0;
-    int currentVerse = 1;
-
-    // Process first line of the file
-    String line = bibleReader.readLine();
-    String oneLine = line.substring(1);
-    oneLine = oneLine.replaceAll("[^0-9]+", " "); // Returns all integers in it
-    String[] d = oneLine.trim().split(" ");
-    currentVerse = Integer.parseInt(d[1]);
-
-    int num = 1; // Keep track of how many lines we've read
-    for (int i = 0; i < 66; i++) { // for each book
-      for (int j = 0; j < NUM_CHAPTERS[i]; j++) { // for each chapter
-        String[] chapLineCollection = new String[180];
-
-        int index = 0; // Keep track of line number starting at 0 read for EACH CHAPTER
-        while (previousVerse < currentVerse && num <= TOTAL_NUM_VERSES){
-          previousVerse = currentVerse;
-
-          line = line.substring(line.indexOf(" ")+1); // Keep just the content of the line
-          chapLineCollection[index] = line;
-          index++; // Increment index in chapLineCollection String[]
-
-          // Read in new line and check chapter
-          line = bibleReader.readLine();
-          if (line != null) {
-            oneLine = line.substring(1);
-            oneLine = oneLine.replaceAll("[^0-9]+", " ");
-            d = oneLine.trim().split(" ");
-            currentVerse = Integer.parseInt(d[1]);
-          }
-          num++; // Increment total number of lines we've read
-        }
-
-        book[i][j] = Arrays.copyOfRange(chapLineCollection, 0, index);
-
-        previousVerse = 0;
+      numVerses[i] = new int[NUM_CHAPTERS[i]];
+      for (int j = 0; j < NUM_CHAPTERS[i]; j++) {
+        book[i][j] = new String[200];
       }
     }
+    
+    String line;
+    while ((line = bibleReader.readLine()) != null) {
+      Verse v = new Verse(line, this::getBookIndex);
+      book[v.getBook()][v.getChapter() - 1][v.getVerse() - 1] = v.getText();
+      numVerses[v.getBook()][v.getChapter() - 1] = v.getVerse();
+    }
+
+    for (int i = 0; i < NUM_BOOKS; i++) { // Assign correct number of chapters
+      for (int j = 0; j < NUM_CHAPTERS[i]; j++) {
+        book[i][j] = Arrays.copyOfRange(book[i][j], 0, numVerses[i][j]);;
+      }
+    }
+
     return book;
   }
 
@@ -240,75 +230,5 @@ public abstract class Bible {
       22,
   };
 
-  private static final int[] NUM_VERSES = {
-      1533, // Genesis
-      1213, // Exodus
-      859 , // Leviticus
-      1288, // etc.
-      95,
-      65,
-      61,
-      8,
-      81,
-      69,
-      81,
-      71,
-      94,
-      82,
-      28,
-      40,
-      16,
-      107,
-      246,
-      91,
-      22,
-      11,
-      129,
-      136,
-      15,
-      127,
-      35,
-      19,
-      7,
-      14,
-      2,
-      4,
-      10,
-      4,
-      5,
-      5,
-      3,
-      21,
-      5,
-      1071, // Matthew
-      678,  // Mark
-      1151, // Luke
-      879,  // John
-      1007, // Acts
-      433,  // Romans
-      437,  // 1 Corinthians
-      257,  // 2 Corinthians
-      149,  // Galatians
-      155,  // Ephesians
-      104,  // Philippians
-      95,   // Colossians
-      89,   // 1 Thessalonians
-      47,   // 2 Thessalonians
-      113,  // 1 Timothy
-      83,   // 2 Timothy
-      46,   // Titus
-      25,   // Philemon
-      303,  // Hebrews
-      108,  // James
-      105,  // 1 Peter
-      61,   // 2 Peter
-      105,  // 1 John
-      13,   // 2 John
-      14,   // 3 John
-      25,   // Jude
-      404,  // Revelation
-  };
-
-  private static final int TOTAL_NUM_VERSES = IntStream.of(NUM_VERSES).sum();
   private static final int NUM_BOOKS = NUM_CHAPTERS.length;
 }
