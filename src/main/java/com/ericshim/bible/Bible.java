@@ -144,16 +144,11 @@ public abstract class Bible {
         book[i][j] = new String[200];
       }
     }
-
-    List<String> set = new ArrayList<>();
-
+    
     String line;
     while ((line = bibleReader.readLine()) != null) {
       Verse v = new Verse(line, this::getBookIndex);
       book[v.getBook()][v.getChapter() - 1][v.getVerse() - 1] = v.getText();
-      if (!set.contains(v.getBookNameInLine())) {
-        set.add(v.getBookNameInLine());
-      }
       numVerses[v.getBook()][v.getChapter() - 1] = v.getVerse();
     }
 
