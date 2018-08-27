@@ -36,7 +36,6 @@ public class Information {
 
     borderPane.setLeft(listView);
     borderPane.setCenter(textArea);
-
   }
 
   public void initListView() throws IOException {
@@ -60,10 +59,9 @@ public class Information {
     InputStream korean;
     BufferedReader inKorean;
     korean = Information.class.getResourceAsStream('/' + fileName);
-    inKorean = new BufferedReader(new InputStreamReader(korean, "UTF8"));
+    inKorean = new BufferedReader(new InputStreamReader(korean, "UTF-8"));
 
     String line = inKorean.readLine();
-    line = line.substring(1); //this accounts for random ? character for first line
 
     while (line != null){
       String info = "";
