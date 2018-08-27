@@ -43,4 +43,13 @@ public class CopiedInfo {
         this.verse == c.verse &&
         this.offset == c.offset;
   }
+
+  @Override
+  public String toString() {
+    if (offset > 0) {
+      return String.format("%d %d:%d-%d", bookIndex, chapter, verse, verse + offset);
+    } else {
+      return String.format("%d %d:%d", bookIndex, chapter, verse);
+    }
+  }
 }

@@ -126,8 +126,7 @@ public class VerseCopier extends Application {
         rb3.requestFocus();
       }
       historyViewController.addHistoryItem(formatter.getBookIndex(getBook()),
-          getChapterNumber(), getBeginningVerseNumber(),
-          getEndingVerseNumber() - getBeginningVerseNumber());
+          chapter, beginningVerse, endingVerse - beginningVerse);
       status.setText("COPIED");
     });
     copyButton.setDisable(true);
@@ -340,7 +339,7 @@ public class VerseCopier extends Application {
   private int getVerseNumberFromVerseField(TextField verseField) {
     try {
       String input = verseField.getText();
-      if (input.trim().length() == 0) return 0;
+      if (input.trim().length() == 0) return -2;
       return Integer.parseInt(input);
     } catch (Exception e) {
       return -1;
@@ -365,11 +364,11 @@ public class VerseCopier extends Application {
     boolean validBeginning = formatter.validVerse(book, chapter, beginning);
     boolean validEnding = formatter.validVerse(book, chapter, ending);
 
-    if (validBeginning && ending == 0) {
+    if (validBeginning && ending == -2) {
       beginningVerse = beginning;
       endingVerse = beginning;
       return true;
-    } else if (beginning == 0 && validEnding) {
+    } else if (beginning == -2 && validEnding) {
       beginningVerse = ending;
       endingVerse = ending;
       return true;

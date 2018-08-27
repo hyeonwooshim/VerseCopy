@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 
 public class CopyHistoryViewController {
   private ObservableList<CopiedInfo> history;
@@ -19,6 +20,7 @@ public class CopyHistoryViewController {
     }
     historyView.setItems(this.history);
     historyView.setOrientation(Orientation.VERTICAL);
+    historyView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     historyView.setPrefSize(300, 400);
   }
 
