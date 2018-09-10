@@ -24,8 +24,6 @@ public abstract class Bible {
    */
   public Bible(BufferedReader bibleReader) throws IOException {
     if (bibleReader == null) return;
-    int i = 0;
-    String[] bns = getBookNames();
     indexedBible = readBible(bibleReader);
   }
 

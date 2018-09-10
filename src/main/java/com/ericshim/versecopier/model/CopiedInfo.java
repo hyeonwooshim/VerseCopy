@@ -5,6 +5,7 @@ public class CopiedInfo {
   private int chapter;
   private int verse;
   private int offset;
+  private String fullText;
 
   public CopiedInfo(int bookIndex, int chapter, int verse, int offset) {
     this.bookIndex = bookIndex;
@@ -27,6 +28,14 @@ public class CopiedInfo {
 
   public int getOffset() {
     return offset;
+  }
+
+  public String getFullText() {
+    return fullText;
+  }
+
+  public void setFullText(String fullText) {
+    this.fullText = fullText;
   }
 
   @Override

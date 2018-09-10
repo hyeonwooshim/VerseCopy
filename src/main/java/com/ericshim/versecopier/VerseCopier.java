@@ -6,7 +6,8 @@ import com.ericshim.bible.NkjvBible;
 import com.ericshim.helper.Printer;
 import com.ericshim.lib.ClipboardTransfer;
 import com.ericshim.versecopier.controller.CopyHistoryViewController;
-
+import com.ericshim.versecopier.model.CopiedInfo;
+import com.ericshim.versecopier.view.CopiedInfoCell.ButtonGridCallback;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -82,7 +83,7 @@ public class VerseCopier extends Application {
       alert.showAndWait();
     }
 
-    historyViewController = new CopyHistoryViewController(null);
+    initializeHistoryViewController();
 
     // set up BorderPane with other nodes
     BorderPane bPane = new BorderPane();
@@ -102,6 +103,36 @@ public class VerseCopier extends Application {
     initializeInfo();
   }
 
+  private void initializeHistoryViewController() {
+    historyViewController = new CopyHistoryViewController(null);
+    historyViewController.setButtonGridCallback(new ButtonGridCallback() {
+      @Override
+      public void copy(CopiedInfo copiedInfo) {
+        int book = copiedInfo.getBookIndex();
+        int chapter = copiedInfo.getChapter();
+        int beginningVerse = copiedInfo.getVerse();
+        int endingVerse = copiedInfo.getVerse() + copiedInfo.getOffset();
+        if (getRecitedOrRead()) {
+          clipper.setClipboardContents(
+              formatter.formatVerses(book, chapter, copiedInfo.getVerse(), endingVerse,
+                  getBeforeOrAfter()));
+          rb1.requestFocus();
+        } else {
+          clipper.setClipboardHtmlContents(
+              formatter.getHtmlNumberedVerses(book, chapter, beginningVerse, endingVerse)
+          );
+          rb3.requestFocus();
+        }
+        status.setText("COPIED");
+      }
+
+      @Override
+      public void restore(CopiedInfo copiedInfo) {
+
+      }
+    });
+  }
+
   // initializes label and copyButton
   private HBox getHBox() {
     HBox hbox = new HBox();
@@ -114,6 +145,8 @@ public class VerseCopier extends Application {
     copyButton = new Button("Copy Verse");
     copyButton.setDefaultButton(true);
     copyButton.setOnAction(event -> {
+      String defaultFormat = formatter.formatVerses(
+          getBook(), chapter, beginningVerse, endingVerse, true);
       if (getRecitedOrRead()) {
         clipper.setClipboardContents(
             formatter.formatVerses(getBook(), chapter, beginningVerse, endingVerse,
@@ -126,7 +159,7 @@ public class VerseCopier extends Application {
         rb3.requestFocus();
       }
       historyViewController.addHistoryItem(formatter.getBookIndex(getBook()),
-          chapter, beginningVerse, endingVerse - beginningVerse);
+          chapter, beginningVerse, endingVerse - beginningVerse, defaultFormat);
       status.setText("COPIED");
     });
     copyButton.setDisable(true);

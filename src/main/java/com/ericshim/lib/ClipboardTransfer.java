@@ -73,7 +73,6 @@ public final class ClipboardTransfer implements ClipboardOwner {
         result = (String)contents.getTransferData(DataFlavor.stringFlavor);
       }
       catch (UnsupportedFlavorException | IOException ex){
-        System.out.println(ex);
         ex.printStackTrace();
       }
     }

@@ -26,16 +26,14 @@ public class VerseFormatter {
   /**
    * Gets verses formatted as recited verses.
    *
-   * @param book book name
+   * @param bookIndex book index
    * @param chap chapter number
    * @param verse1 starting verse number
    * @param verse2 ending verse number
    * @param saidBefore whether the verse location was mentioned before recitation
    * @return String with verses formatted as recited verses.
    */
-  public String formatVerses(String book, int chap, int verse1, int verse2,
-      boolean saidBefore) {
-    int bookIndex = getBookIndex(book);
+  public String formatVerses(int bookIndex, int chap, int verse1, int verse2, boolean saidBefore) {
     String bookName1 = bible1.getShortenedBookName(bookIndex);
     String bookName2 = bible2.getShortenedBookName(bookIndex);
     String korStr;
@@ -65,6 +63,11 @@ public class VerseFormatter {
     return korStr + "\n" + engStr;
   }
 
+  public String formatVerses(String book, int chap, int verse1, int verse2, boolean saidBefore) {
+    int bookIndex = getBookIndex(book);
+    return formatVerses(bookIndex, chap, verse1, verse2, saidBefore);
+  }
+
   /**
    * Methods for getting numbered lines (made for Microsoft Word)
    **/
@@ -84,15 +87,14 @@ public class VerseFormatter {
   /**
    * Gets verses formatted as read verses.
    *
-   * @param book book name
+   * @param bookIndex book index
    * @param chapter chapter number
    * @param verse1 starting verse number
    * @param verse2 ending verse number
    * @return HTML formatted 2-column table of the Korean verses in first column and the English
    * verses in the second column.
    */
-  public String getHtmlNumberedVerses(String book, int chapter, int verse1, int verse2) {
-    int bookIndex = getBookIndex(book);
+  public String getHtmlNumberedVerses(int bookIndex, int chapter, int verse1, int verse2) {
     String bookName1 = bible1.getShortenedBookName(bookIndex);
     String bookName2 = bible2.getShortenedBookName(bookIndex);
     String str = "";
@@ -124,6 +126,11 @@ public class VerseFormatter {
         + "</table>";
 
     return str;
+  }
+
+  public String getHtmlNumberedVerses(String book, int chapter, int verse1, int verse2) {
+    int bookIndex = getBookIndex(book);
+    return getHtmlNumberedVerses(bookIndex, chapter, verse1, verse2);
   }
 
   public int getBookIndex(String book) {
