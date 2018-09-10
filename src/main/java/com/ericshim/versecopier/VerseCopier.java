@@ -128,7 +128,14 @@ public class VerseCopier extends Application {
 
       @Override
       public void restore(CopiedInfo copiedInfo) {
-
+        bookName.setText(engBible.getBookName(copiedInfo.getBookIndex()));
+        chapNum.setText(Integer.toString(copiedInfo.getChapter()));
+        verse1.setText(Integer.toString(copiedInfo.getVerse()));
+        if (copiedInfo.getOffset() > 0) {
+          verse2.setText(Integer.toString(copiedInfo.getVerse() + copiedInfo.getOffset()));
+        } else {
+          verse2.setText("");
+        }
       }
     });
   }
